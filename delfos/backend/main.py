@@ -127,12 +127,15 @@ def get_predictions():
     def get_player_id_fuzzy(name):
         if pd.isna(name):
             return None
-        match, score, _ = process.extractOne(
+        result = process.extractOne(
             name, player_name_to_id.keys(), scorer=fuzz.token_sort_ratio
         )
+        if result is None:
+            return None
+        match, score, _ = result
         # Puedes ajustar el umbral si quieres
         if score >= 80:
-            return player_name_to_id[match]
+            return player_name_to_id.get(match)
         return None
 
     # Aplicar a cada predicción

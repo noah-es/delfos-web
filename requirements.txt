@@ -1,0 +1,14 @@
+pandas
+numpy
+requests
+joblib
+scikit-learn
+beautifulsoup4
+soccerdata
+rapidfuzz
+xgboost
+fastapi
+uvicorn
+python-dotenv
+passlib[bcrypt]
+python-multipart
