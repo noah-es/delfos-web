@@ -94,7 +94,7 @@ def login(username: str = Form(...), password: str = Form(...)):
 def get_matches():
     """Devuelve fixtures del día actual"""
     today = datetime.today().strftime("%Y-%m-%d")
-    file_path = f"results/fixtures/fixtures_{today}.json"
+    file_path = f"C:/Users/maseo/OneDrive/Escritorio/BetAI Model/results/fixtures/fixtures_{today}.json"
 
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Fixtures not available yet")
@@ -108,8 +108,8 @@ def get_matches():
 def get_predictions():
     """Devuelve predicciones del día actual con player_id usando fuzzy matching"""
     today = datetime.today().strftime("%Y-%m-%d")
-    predictions_path = f"results/predictions_{today}.csv"
-    players_csv_path = "delfos/frontend/photos/players_ids.csv"
+    predictions_path = f"C:/Users/maseo/OneDrive/Escritorio/BetAI Model/results/predictions_{today}.csv"
+    players_csv_path = "C:/Users/maseo/OneDrive/Escritorio/Delfos/delfos-web/delfos/frontend/photos/players_ids.csv"
 
     if not os.path.exists(predictions_path):
         raise HTTPException(status_code=404, detail="Predictions not available yet")
@@ -142,5 +142,5 @@ def get_predictions():
     df_pred['player_id'] = df_pred['player_'].apply(get_player_id_fuzzy)
 
     predictions = df_pred.to_dict(orient="records")
-    df_pred.to_csv(f'results/predictions_{today}_fotos.csv', index=False)
+    df_pred.to_csv(f'C:/Users/maseo/OneDrive/Escritorio/BetAI Model/results/predictions_{today}_fotos.csv', index=False)
     return predictions
