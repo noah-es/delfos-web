@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delfos - Today's Matches & Player Predictions</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: #0e0e0e;
+      color: #f3f3f3;
+    }
+
+    header {
+      background-color: #0e0e0e;
+      padding: 24px 40px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 40px;
+      width: auto;
+      margin-left: 12px;
+      vertical-align: middle;
+    }
+
+    .top-actions {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      background-color: #1a1a1a;
+      color: #f3f3f3;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid #2b2b2b;
+      transition: background-color 0.2s ease, transform 0.08s ease;
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      background-color: #2b2b2b;
+    }
+
+    .nav-btn:active {
+      transform: translateY(1px);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      color: #d4d4d4;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 0 40px 40px;
+    }
+
+    .section {
+      flex: 1;
+      background-color: #1a1a1a;
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      min-width: 320px;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th {
+      text-align: left;
+      padding: 14px 12px;
+      color: #a0a0a0;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #2b2b2b;
+    }
+
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #2b2b2b;
+      font-size: 0.95rem;
+      color: #e0e0e0;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: #1a1a1a;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #222222;
+    }
+
+    tr:hover td {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+
+    td.red {
+      color: #f87171;
+      font-weight: 600;
+    }
+
+    td.orange {
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    td.green {
+      color: #4ade80;
+      font-weight: 600;
+    }
+
+    .positive {
+      color: #4ade80;
+    }
+
+    .negative {
+      color: #f87171;
+    }
+
+    label {
+      font-weight: 600;
+      margin-right: 10px;
+      color: #90cdf4;
+    }
+
+    select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #2b2b2b;
+      background-color: #1a1a1a;
+      color: #f3f3f3;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .error-message {
+      color: #f87171;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .loading {
+      text-align: center;
+      color: #a0a0a0;
+    }
+
+    /* New styles for player visualization */
+
+    .player-header {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dropdown-icon {
+      font-size: 0.8rem;
+      color: #a0a0a0;
+    }
+
+    .core-statistics .stats-grid {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background-color: #222222;
+      padding: 12px;
+      border-radius: 8px;
+      flex: 1;
+      text-align: center;
+    }
+
+    .stat-card .icon {
+      margin-bottom: 8px;
+      margin: 0 auto;
+    }
+
+    .yellow-card {
+      background-color: #ffff00;
+      width: 24px;
+      height: 32px;
+      border-radius: 4px;
+    }
+
+    .foul-icon {
+      width: 32px;
+      height: 32px;
+      fill: #f3f3f3;
+    }
+
+    .whistle-icon {
+      width: 50px;
+      height: 50px;
+      vertical-align: middle;
+      margin-right:20px;
+    }
+
+    .stat-card .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .stat-card .desc {
+      font-size: 0.85rem;
+      color: #a0a0a0;
+    }
+
+    .model-predictions {
+      margin-bottom: 24px;
+    }
+
+    .prediction-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .prediction-row .label {
+      flex: 0 0 120px;
+      color: #d4d4d4;
+      font-size: 0.95rem;
+    }
+
+    .prediction-row .bar-container {
+      flex: 1;
+      background-color: #2b2b2b;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .prediction-row .bar {
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .prediction-row .value {
+      flex: 0 0 60px;
+      text-align: right;
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .top-actions {
+        position: static;
+        transform: none;
+        margin-top: 12px;
+        justify-content: flex-end;
+      }
+
+      header {
+        padding-bottom: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .core-statistics .stats-grid {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      Delfos
+      <img src="Logo Delfos.png" alt="Delfos Logo">
+    </div>
+    <nav class="top-actions">
+      <button id="home-btn" class="nav-btn" type="button">Home</button>
+      <button id="signout-btn" class="nav-btn" type="button">Sign Out</button>
+</nav>
+
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="section full-width">
+      <h1>Today's Matches</h1>
+      <div id="matches-error" class="error-message" style="display: none;"></div>
+      <table id="matches-table">
+        <thead>
+          <tr>
+            <th scope="col">Competition</th>
+            <th scope="col">Home Team</th>
+            <th scope="col">Away Team</th>
+            <th scope="col">Time (Spain)</th>
+            <th scope="col">Referee</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <h2>Player Statistics & Predictions</h2>
+      <label for="player-select">Select Player:</label>
+      <select id="player-select" aria-label="Select a player for statistics">
+        <option value="">--Choose a player--</option>
+      </select>
+      <div id="player-error" class="error-message" style="display: none;"></div>
+
+      <div id="player-content" style="display: none;">
+        <div id="player-image-container" style="margin-bottom: 20px; text-align:center;">
+          <img id="player-image" src="" alt="Player Image" style="width:100px; height:100px; border-radius:50%; object-fit:cover; display:none;">
+        </div>
+        <div class="core-statistics">
+          <h3>Core Statistics <span style="font-size: 0.85rem; color: #a0a0a0;">Season/League vs Specific Op.</span></h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="icon yellow-card"></div>
+              <div class="value" id="yellow-value"></div>
+              <div class="desc">Avg yellow cards per 90 min.</div>
+            </div>
+            <div class="stat-card">
+              <svg class="icon foul-icon" viewBox="0 0 24 24">
+              <img src="whistle.png" alt="Whistle Icon" class="whistle-icon">
+              </svg>
+              <div class="value" id="fouls-value"></div>
+              <div class="desc">Avg fouls committed per 90 min.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="model-predictions">
+          <h3>Model Predictions</h3>
+          <div id="predictions-list"></div>
+        </div>
+
+        <div class="market-comparisons">
+          <h3>Market Comparisons</h3>
+          <table id="market-table">
+            <thead>
+              <tr>
+                <th>Threshold</th>
+                <th>Model Prob</th>
+                <th>Bet365 Odds</th>
+                <th>Implied</th>
+                <th>Value Edge</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Referee Statistics</h2>
+      <table id="referee-table">
+        <thead>
+          <tr>
+            <th scope="col">Metric</th>
+            <th scope="col">Description</th>
+            <th scope="col">Value</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h2>Rival Statistics</h2>
+      <table id="rival-table">
+        <thead>
+          <tr>
+            <th scope="col">Rival Name</th>
+            <th scope="col">Shots / 90</th>
+            <th scope="col">Passes / 90</th>
+            <th scope="col">Fouls / 90</th>
+            <th scope="col">Yellow / 90</th>
+            <th scope="col">Dribbles / 90</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://127.0.0.1:8000';
+
+    const playerMetrics = [
+      { key: 'yellow_cards_per_90', label: 'Yellow Cards / 90', desc: 'Avg yellow cards per 90 min' },
+      { key: 'fouls_per_90', label: 'Fouls / 90', desc: 'Avg fouls per 90 min' },
+      { key: 'prob_fouls_over_0.5', label: 'P(Fouls >0.5)', desc: 'Probability of >0.5 fouls' },
+      { key: 'prob_fouls_over_1.5', label: 'P(Fouls >1.5)', desc: 'Probability of >1.5 fouls' },
+      { key: 'prob_fouls_over_2.5', label: 'P(Fouls >2.5)', desc: 'Probability of >2.5 fouls' },
+      { key: 'prob_fouls_over_3.5', label: 'P(Fouls >3.5)', desc: 'Probability of >3.5 fouls' }
+    ];
+
+    const refereeMetrics = [
+      { key: 'yellow_cards_per_match_by_referee_season', label: 'Yellow Cards / Match', desc: 'Avg yellow cards per match', highlight: 2, classHigh: 'red' },
+      { key: 'red_cards_per_match_by_referee_season', label: 'Red Cards / Match', desc: 'Avg red cards per match', highlight: 2, classHigh: 'red' },
+      { key: 'fouls_per_90_by_referee_season', label: 'Fouls / 90', desc: 'Avg fouls per 90 min', highlight: 5, classHigh: 'orange' }
+    ];
+
+    const marketMetrics = [
+      { threshold: 'P(Yellow)', modelKey: 'prob_yellow_cards', odds: 10.00 },
+      { threshold: 'Fouls >0.5', modelKey: 'prob_fouls_over_0.5', odds: 1.80 },
+      { threshold: 'Fouls >1.5', modelKey: 'prob_fouls_over_1.5', odds: 3.50 },
+      { threshold: 'Fouls >2.5', modelKey: 'prob_fouls_over_2.5', odds: 8.00 },
+      { threshold: 'Fouls >3.5', modelKey: 'prob_fouls_over_3.5', odds: 15.00 }
+    ];
+
+    let allPlayers = [];
+    let allMatches = [];
+    let refereeStatsMap = {};
+
+    async function fetchData(endpoint) {
+      const response = await fetch(`${API_BASE}/${endpoint}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load ${endpoint}`);
+      }
+      return await response.json();
+    }
+
+    function showLoading(tbody, colspan) {
+      tbody.innerHTML = `<tr><td colspan="${colspan}" class="loading">Loading...</td></tr>`;
+    }
+
+    function showError(elementId, message) {
+      const errorDiv = document.getElementById(elementId);
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+
+    function hideError(elementId) {
+      const errorDiv = document.getElementById(elementId);
+      errorDiv.style.display = 'none';
+    }
+
+    async function loadMatches() {
+      const tbody = document.querySelector('#matches-table tbody');
+      showLoading(tbody, 5);
+      hideError('matches-error');
+      try {
+        allMatches = await fetchData('matches');
+        tbody.innerHTML = '';
+        allMatches.forEach(match => {
+          const row = document.createElement('tr');
+          ['competition', 'home_name', 'away_name', 'hour', 'referee'].forEach(key => {
+            const td = document.createElement('td');
+            td.textContent = match[key] || 'Unknown';
+            row.appendChild(td);
+          });
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        tbody.innerHTML = '';
+        showError('matches-error', err.message);
+      }
+    }
+
+    async function loadPlayerPredictions() {
+      const select = document.getElementById('player-select');
+      hideError('player-error');
+      try {
+        allPlayers = await fetchData('predictions');
+        refereeStatsMap = allPlayers.reduce((map, p) => {
+          const name = p.referee_name || 'Unknown';
+          if (!map[name]) {
+            map[name] = {
+              yellow_cards_per_match_by_referee_season: p.yellow_cards_per_match_by_referee_season,
+              red_cards_per_match_by_referee_season: p.red_cards_per_match_by_referee_season,
+              fouls_per_90_by_referee_season: p.fouls_per_90_by_referee_season
+            };
+          }
+          return map;
+        }, {});
+
+        select.innerHTML = '<option value="">--Choose a player--</option>';
+        const uniquePlayers = [...new Set(allPlayers.map(p => p.player_))];
+        uniquePlayers.forEach(name => {
+          const option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        });
+      } catch (err) {
+        select.innerHTML = '<option value="">--Choose a player--</option>';
+        showError('player-error', err.message);
+      }
+    }
+
+    function showPlayerStats(playerName) {
+      
+      const player = allPlayers.find(p => p.player_ === playerName);
+      if (!player) return;
+
+      // Mostrar imagen del jugador si tenemos player_id
+      const playerImage = document.getElementById('player-image');
+      if (player.player_id) {
+        playerImage.src = `photos/${player.player_id}.png`;
+        playerImage.style.display = 'block';
+      } else {
+        playerImage.src = '';
+        playerImage.style.display = 'none';
+      }
+
+      document.getElementById('player-content').style.display = 'block';
+
+      // Core stats
+      document.getElementById('yellow-value').textContent = parseFloat(player.yellow_cards_per_90).toFixed(2);
+      document.getElementById('fouls-value').textContent = parseFloat(player.fouls_per_90).toFixed(2);
+
+      // Model predictions with bars
+      const predictionsList = document.getElementById('predictions-list');
+      predictionsList.innerHTML = '';
+      const probMetrics = playerMetrics.filter(m => m.key.startsWith('prob_'));
+      probMetrics.forEach(metric => {
+        const prob = parseFloat(player[metric.key]);
+        const probPercent = (prob * 100).toFixed(0);
+        const barColor = metric.key === 'prob_yellow_cards' ? '#f87171' : (prob > 0.5 ? '#f87171' : '#fbbf24');
+        const row = document.createElement('div');
+        row.className = 'prediction-row';
+        row.innerHTML = `
+          <div class="label">${metric.label}</div>
+          <div class="bar-container">
+            <div class="bar" style="width: ${probPercent}%; background-color: ${barColor};"></div>
+          </div>
+          <div class="value">${probPercent}%</div>
+        `;
+        predictionsList.appendChild(row);
+      });
+
+      // Market comparisons table (dinámico desde API)
+      const marketTbody = document.querySelector('#market-table tbody');
+      marketTbody.innerHTML = '';
+
+      const thresholds = [0.5, 1.5, 2.5, 3.5];  // puedes ampliar si tienes más
+      thresholds.forEach(th => {
+        const modelKey = `prob_fouls_over_${th}`;
+        const oddsKey = `${th}_Bet365_odd`;
+        const impliedKey = `implied_prob_${th}_Bet365`;
+
+        if (player[modelKey] !== undefined && player[oddsKey] !== undefined && player[impliedKey] !== undefined) {
+          const modelProb = parseFloat(player[modelKey]);
+          const odds = parseFloat(player[oddsKey]);
+          const impliedProb = parseFloat(player[impliedKey]);
+
+          const edge = (modelProb - impliedProb) * 100;
+          const edgeSign = edge > 0 ? '+' : '';
+          const edgeClass = edge > 0 ? 'positive' : 'negative';
+
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>Fouls >${th}</td>
+            <td>${(modelProb * 100).toFixed(1)}%</td>
+            <td>${odds.toFixed(2)}</td>
+            <td>${(impliedProb * 100).toFixed(1)}%</td>
+            <td class="${edgeClass}">${edgeSign}${edge.toFixed(1)}%</td>
+          `;
+          marketTbody.appendChild(row);
+        }
+      });
+
+      // Referee stats (unchanged)
+      const refereeData = refereeStatsMap[player.referee_name || 'Unknown'];
+      const tbodyRef = document.querySelector('#referee-table tbody');
+      tbodyRef.innerHTML = '';
+      if (refereeData) {
+        refereeMetrics.forEach(metric => {
+          const row = document.createElement('tr');
+          let val = refereeData[metric.key];
+          val = isNaN(parseFloat(val)) ? val : parseFloat(val).toFixed(2);
+          row.innerHTML = `<td>${metric.label}</td><td>${metric.desc}</td><td>${val}</td>`;
+          const numVal = parseFloat(val);
+          if (!isNaN(numVal) && numVal > metric.highlight) {
+            row.lastChild.className = metric.classHigh;
+          }
+          tbodyRef.appendChild(row);
+        });
+      }
+
+      // Rival stats (unchanged)
+      const tbodyRival = document.querySelector('#rival-table tbody');
+      tbodyRival.innerHTML = '';
+      const rowRival = document.createElement('tr');
+      [
+        player.rival_player,
+        player.shots_per_90_rival,
+        player.passes_per_90_rival,
+        player.fouls_per_90_rival,
+        player.yellow_cards_per_90_rival,
+        player.dribbles_per_90_rival
+      ].forEach(c => {
+        const td = document.createElement('td');
+        td.textContent = isNaN(parseFloat(c)) ? c : parseFloat(c).toFixed(2);
+        rowRival.appendChild(td);
+      });
+      tbodyRival.appendChild(rowRival);
+    }
+
+    function resetUI() {
+      document.querySelector('#matches-table tbody').innerHTML = '';
+      document.querySelector('#referee-table tbody').innerHTML = '';
+      document.querySelector('#rival-table tbody').innerHTML = '';
+      document.getElementById('player-select').innerHTML = '<option value="">--Choose a player--</option>';
+      document.getElementById('player-content').style.display = 'none';
+      document.getElementById('predictions-list').innerHTML = '';
+      document.querySelector('#market-table tbody').innerHTML = '';
+      hideError('matches-error');
+      hideError('player-error');
+    }
+
+    document.getElementById('player-select').addEventListener('change', e => showPlayerStats(e.target.value));
+
+    document.getElementById('home-btn').addEventListener('click', e => {
+      e.preventDefault();
+      resetUI();
+      loadMatches();
+      loadPlayerPredictions();
+    });
+
+    // Initial load
+    loadMatches();
+    loadPlayerPredictions();
+    document.getElementById('signout-btn').addEventListener('click', () => {
+        // Limpiamos la UI
+        resetUI();
+
+        // Redirigimos al login
+        window.location.href = '/';
+    });
+  </script>
+</body>
+</html>

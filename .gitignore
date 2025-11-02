@@ -1,1 +1,31 @@
-hola
+# Ignorar archivos CSV
+*.csv
+
+# Ignorar archivos Excel
+*.xlsx
+
+# ignorar json
+*.json
+
+# ignorar png
+*.png
+
+# Ignorar archivos de base de datos SQLite
+*.db
+*.sqlite
+
+# Ignorar archivos de modelos comunes
+*.pkl
+*.h5
+*.joblib
+*.sav
+*.model
+*.pt
+*.pth
+*.onnx
+
+# Ignorar archivos de configuración de entorno
+.venv/
+.env
+
+*.pyc

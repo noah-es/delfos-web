@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delfos - Login</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body, html {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+  }
+  body {
+    background: url('/frontend/images/main_theme.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .login-container {
+    background-color: rgba(0,0,0,0.8);
+    padding: 40px;
+    border-radius: 12px;
+    width: 350px;
+    color: #f3f3f3;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  h2 { text-align: center; margin-bottom: 24px; }
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    border: none;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #1a1a1a;
+    color: #f3f3f3;
+    border: 1px solid #2b2b2b;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  button:hover { background-color: #2b2b2b; }
+  .message { text-align: center; margin-bottom: 12px; color: #f87171; }
+  .switch-form { text-align: center; margin-top: 8px; cursor: pointer; color: #90cdf4; }
+</style>
+</head>
+<body>
+  <div class="login-container">
+    <h2 id="form-title">Login</h2>
+    <div class="message" id="message"></div>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button id="submit-btn">Login</button>
+    <div class="switch-form" id="switch-form">Don't have an account? Sign Up</div>
+  </div>
+
+<script>
+const API_BASE = 'http://127.0.0.1:8000';
+let isLogin = true;
+
+const formTitle = document.getElementById('form-title');
+const submitBtn = document.getElementById('submit-btn');
+const switchForm = document.getElementById('switch-form');
+const messageDiv = document.getElementById('message');
+
+switchForm.addEventListener('click', () => {
+  isLogin = !isLogin;
+  formTitle.textContent = isLogin ? 'Login' : 'Sign Up';
+  submitBtn.textContent = isLogin ? 'Login' : 'Sign Up';
+  switchForm.textContent = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
+  messageDiv.textContent = '';
+});
+
+submitBtn.addEventListener('click', async () => {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  messageDiv.textContent = '';
+
+  if (!username || !password) {
+    messageDiv.textContent = 'Please enter username and password';
+    return;
+  }
+
+  const endpoint = isLogin ? 'login' : 'signup';
+
+  try {
+    const response = await fetch(`${API_BASE}/${endpoint}`, {
+      method: 'POST',
+      body: new URLSearchParams({ username, password }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      window.location.href = 'index.html';
+    } else {
+      messageDiv.textContent = data.detail || 'Error occurred';
+    }
+  } catch (err) {
+    messageDiv.textContent = 'Server error';
+  }
+});
+</script>
+</body>
+</html>
