@@ -144,3 +144,11 @@ def get_predictions():
     predictions = df_pred.to_dict(orient="records")
     df_pred.to_csv(f'C:/Users/maseo/OneDrive/Escritorio/BetAI Model/results/predictions_{today}_fotos.csv', index=False)
     return predictions
+
+@app.get("/strategy")
+def get_strategy():
+    """Sirve la página de estrategia de inversión"""
+    strategy_path = os.path.join(frontend_path, "strategy.html")
+    if not os.path.exists(strategy_path):
+        raise HTTPException(status_code=404, detail="Strategy page not found")
+    return FileResponse(strategy_path)

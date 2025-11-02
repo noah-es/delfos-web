@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delfos - Investment Strategy</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; margin: 0; background-color: #0e0e0e; color: #f3f3f3; }
+    header { background-color: #0e0e0e; padding: 24px 40px; font-size: 2rem; font-weight: bold; color: #ffffff; display: flex; align-items: center; position: relative; }
+    .logo { display: flex; align-items: center; }
+    .logo img { height: 40px; width: auto; margin-left: 12px; vertical-align: middle; }
+    .top-actions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 12px; }
+    .nav-btn { background-color: #1a1a1a; color: #f3f3f3; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 1rem; font-weight: 600; border: 1px solid #2b2b2b; transition: background-color 0.2s ease, transform 0.08s ease; cursor: pointer; }
+    .nav-btn:hover { background-color: #2b2b2b; }
+    .nav-btn:active { transform: translateY(1px); }
+    h1 { font-size: 2rem; margin-bottom: 20px; color: #ffffff; }
+    h3 { font-size: 1.1rem; color: #ffffff; margin-bottom: 12px; }
+    .container { display: flex; flex-direction: column; gap: 30px; padding: 0 40px 40px; }
+    .section { background-color: #1a1a1a; padding: 24px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    .full-width { width: 100%; }
+    .chart-image { width: 100%; height: auto; border-radius: 8px; background-color: #2b2b2b; }
+    @media (max-width: 900px) {
+      .top-actions { position: static; transform: none; margin-top: 12px; justify-content: flex-end; }
+      header { padding-bottom: 12px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      Delfos
+      <img src="Logo Delfos.png" alt="Delfos Logo">
+    </div>
+    <nav class="top-actions">
+      <button id="home-btn" class="nav-btn" type="button">Home</button>
+      <button id="strategy-btn" class="nav-btn" type="button">Strategy</button>
+      <button id="signout-btn" class="nav-btn" type="button">Sign Out</button>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="section full-width">
+      <h1>Investment Strategy vs. S&P 500</h1>
+
+      <p style="color: #a0a0a0; margin-bottom: 12px;">
+        This report summarizes a Monte Carlo backtesting analysis comparing our systematic investment
+        strategy to the S&P 500 (SPY). The study covers 2023-01-01 to 2025-07-01, using 100
+        simulated backtests with 6‑month rebalancing and parameter perturbations for sensitivity checks.
+      </p>
+
+      <p style="color: #a0a0a0; margin-bottom: 12px;">
+        Mathematical summary (concise):
+        let R_T denote the final cumulative return of a simulated run and S_T the benchmark return.
+        We report the sample median, mean μ, standard deviation σ, interquartile range (25th–75th),
+        the 5th–95th percentile band, compound annual growth rate (CAGR) and Sharpe ratio.
+        Sharpe is computed as Sharpe = (μ − R_f) / σ with risk‑free rate R_f = 0.0325.
+      </p>
+
+      <div style="color: #a0a0a0; margin: 8px 0;">
+        <strong>Key parameters</strong>
+        <ul style="margin: 8px 0 12px 20px; color: #a0a0a0;">
+          <li>Period: 2023‑01‑01 → 2025‑07‑01</li>
+          <li>Simulations: 100 Monte Carlo backtests</li>
+          <li>Rebalancing: every 6 months</li>
+          <li>Risk‑free rate: 0.0325 (annual)</li>
+          <li>Sensitivity: small parameter perturbations applied to clustering and optimization inputs</li>
+        </ul>
+      </div>
+
+      <div style="color: #a0a0a0; margin-bottom: 12px;">
+        <strong>How to read the figures</strong>
+        <ul style="margin: 8px 0 0 20px; color: #a0a0a0;">
+          <li><em>Fan chart</em>: median (blue), 25th–75th and 5th–95th percentile bands — shows dispersion of paths.</li>
+          <li><em>Return histogram</em>: empirical distribution of final returns R_T across simulations; red line = SPY final return.</li>
+          <li><em>Robustness plot</em>: individual simulation paths (grey) compared to SPY (red) to inspect consistency.</li>
+        </ul>
+      </div>
+
+      <p style="color: #a0a0a0; margin-top: 12px;">
+        Interpretation checklist: look for a concentrated return distribution (low σ), median and mean above
+        the benchmark, stable outperformance across percentiles, and a Sharpe ratio that meaningfully
+        exceeds the benchmark's risk‑adjusted return.
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>Fan Chart: Cumulative Return Percentiles</h3>
+      <p style="color: #a0a0a0; margin-bottom: 16px;">This chart illustrates the range of potential outcomes from our strategy simulations. The blue med</p>ian line represents the most likely performance, while the shaded areas show the 25th-75th and 5th-95th percentile outcomes, highlighting the strategy's consistency compared to the S&P 500 (red line).</p>
+      <img src="fan_chart_20251020_181539.png" alt="Fan Chart of Cumulative Returns" class="chart-image">
+    </div>
+
+    <div class="section"></div>
+      <h3>Final Return Distribution (100 Simulations)</h3>
+      <p style="color: #a0a0a0; margin-bottom: 16px;">The histogram displays the frequency of different final returns across 100 backtests. The concentration of results demonstrates the strategy's robustness. The vertical red line indicates the S&P 500's return for the same period, showing that a significant majority of our simulations outperformed the benchmark.</p>
+      <img src="returns_distribution_20251020_181539.png" alt="Distribution of Final Returns" class="chart-image">
+    </div>
+
+    <div class="section">
+      <h3>Robustness: 100 Backtests vs SPY</h3>
+      <p style="color: #a0a0a0; margin-bottom: 16px;">Each grey line represents an individual backtest of the strategy. This visualization provides a clear view of the performance consistency across all simulations. The collective outperformance over the S&P 500 (red line) underscores the strategy's viability and robustness.</p>
+      <img src="robustness_backtests_vs_spy_20251020_181539.png" alt="100 Backtests vs SPY" class="chart-image">
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('home-btn').addEventListener('click', () => {
+      window.location.href = '/index.html';
+    });
+    
+    document.getElementById('signout-btn').addEventListener('click', () => {
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>
